@@ -166,6 +166,10 @@ define(["N/search"], (search) => {
         "internalid",
         "custrecord_client_name",
         "custrecord_practice_area",
+        search.createColumn({
+          name: "custrecord_mhi_practice_department",
+          join: "custrecord_practice_area",
+        }),
         "custrecordmhi_attorneys",
         "custrecordmhi_matter_id",
         "custrecordmhi_principal_attorney",
@@ -197,17 +201,20 @@ define(["N/search"], (search) => {
       var principalAttorney = result.getValue(
         "custrecordmhi_principal_attorney"
       );
+      //   var department = result.getValue({
+      //     name: "custrecordmhi_department",
+      //     join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
+      //   });
       var department = result.getValue({
-        name: "custrecordmhi_department",
-        join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
+        name: "custrecord_mhi_practice_department",
+        join: "custrecord_practice_area",
       });
       var location = result.getValue({
         name: "custrecord_mhi_location_id",
         join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
       });
       var practiceArea = result.getValue({
-        name: "custrecordmhi_practice_area",
-        join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
+        name: "custrecord_practice_area",
       });
 
       matterObj[id] = {

@@ -140,6 +140,10 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
         "internalid",
         "custrecord_client_name",
         "custrecord_practice_area",
+        search.createColumn({
+          name: "custrecord_mhi_practice_department",
+          join: "custrecord_practice_area",
+        }),
         "custrecordmhi_attorneys",
         "custrecordmhi_matter_id",
         "custrecordmhi_principal_attorney",
@@ -171,8 +175,12 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
       const principalAttorney = result.getValue(
         "custrecordmhi_principal_attorney"
       );
+      // const department = result.getValue({
+      //   name: "custrecordmhi_department",
+      //   join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
+      // });
       const department = result.getValue({
-        name: "custrecordmhi_department",
+        name: "custrecord_mhi_practice_department",
         join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
       });
       const location = result.getValue({
@@ -196,7 +204,7 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
   }
 
   /**
-   * Get All search results.`
+   * Get All search results.
    * @param {Array} searchResult - Search Results.
    */
   function getAllSearchResults(searchResult) {
