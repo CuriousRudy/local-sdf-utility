@@ -175,21 +175,16 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
       const principalAttorney = result.getValue(
         "custrecordmhi_principal_attorney"
       );
-      // const department = result.getValue({
-      //   name: "custrecordmhi_department",
-      //   join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
-      // });
       const department = result.getValue({
         name: "custrecord_mhi_practice_department",
-        join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
+        join: "custrecord_practice_area",
       });
       const location = result.getValue({
         name: "custrecord_mhi_location_id",
         join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
       });
       const practiceArea = result.getValue({
-        name: "custrecordmhi_practice_area",
-        join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
+        name: "custrecord_practice_area",
       });
 
       matterObj[id] = {

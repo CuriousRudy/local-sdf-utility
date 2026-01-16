@@ -130,7 +130,7 @@ define(["N/search"], (search) => {
           "cseg_mhi_matters",
           i
         );
-        log.debug("matterId", matterId);
+        console.log("matterId", matterId);
 
         if (!matterId) continue;
         matterList.push(matterId);
@@ -150,7 +150,7 @@ define(["N/search"], (search) => {
       }
     }
 
-    log.debug("matterList", matterList);
+    console.log("matterList", matterList);
 
     if (matterList.length == 0) return;
 
@@ -201,10 +201,6 @@ define(["N/search"], (search) => {
       var principalAttorney = result.getValue(
         "custrecordmhi_principal_attorney"
       );
-      //   var department = result.getValue({
-      //     name: "custrecordmhi_department",
-      //     join: "CUSTRECORDMHI_PRINCIPAL_ATTORNEY",
-      //   });
       var department = result.getValue({
         name: "custrecord_mhi_practice_department",
         join: "custrecord_practice_area",
