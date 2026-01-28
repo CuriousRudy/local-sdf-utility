@@ -1,0 +1,16 @@
+<customlist scriptid="customlist_mhi_ecl_cust_html_radio_ops">
+  <description>The Options to be translated from the radio option on the Custom HTML Fields.</description>
+  <isinactive>F</isinactive>
+  <isordered>T</isordered>
+  <name>MHI | HTML Field Radio values</name>
+  <customvalues>
+    <customvalue scriptid="val_2048634_495971_sb1_408">
+      <isinactive>F</isinactive>
+      <value>Red Flag</value>
+    </customvalue>
+    <customvalue scriptid="val_2048635_495971_sb1_790">
+      <isinactive>F</isinactive>
+      <value>Strength</value>
+    </customvalue>
+  </customvalues>
+</customlist>
