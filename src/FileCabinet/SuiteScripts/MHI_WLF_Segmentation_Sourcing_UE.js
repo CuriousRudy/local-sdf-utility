@@ -34,8 +34,9 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
 
       if (!IS_CREATE && !IS_EDIT) return;
       const currentRec = context.newRecord;
-      const isVoid = currentRec.getValue("void");
-      if (isVoid) return;
+      //Abe R. 1/30/26 - removed by request of Sharon, pursuant to NS Support Case 6759948
+      // const isVoid = currentRec.getValue("void");
+      // if (isVoid) return;
 
       const sublistId =
         currentRec.type == "journalentry" ||
@@ -76,7 +77,7 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
       const lineMatterId = currentRec.getSublistValue(
         sublistId,
         "cseg_mhi_matters",
-        i
+        i,
       );
       const matterId = headerMatterId || lineMatterId;
       if (!matterId) continue;
@@ -105,7 +106,7 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
       const matterId = currentRec.getSublistValue(
         sublistId,
         "cseg_mhi_matters",
-        i
+        i,
       );
 
       if (!matterId) continue;
@@ -117,7 +118,7 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
       const matterId = currentRec.getSublistValue(
         "item",
         "cseg_mhi_matters",
-        j
+        j,
       );
 
       if (!matterId) continue;
@@ -173,7 +174,7 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
       const matterName = result.getValue("custrecord_mhi_matter_name");
 
       const principalAttorney = result.getValue(
-        "custrecordmhi_principal_attorney"
+        "custrecordmhi_principal_attorney",
       );
       const department = result.getValue({
         name: "custrecord_mhi_practice_department",
