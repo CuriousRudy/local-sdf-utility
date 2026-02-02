@@ -34,7 +34,10 @@ define(["N/record", "N/search", "N/runtime"], (record, search, runtime) => {
 
       if (!IS_CREATE && !IS_EDIT) return;
       const currentRec = context.newRecord;
-      //Abe R. 1/30/26 - removed by request of Sharon, pursuant to NS Support Case 6759948
+      // Abe R. 1/30/26 - removed by request of Sharon, pursuant to NS Support Case 6759948
+      const tranType = currentRec.type;
+      const createdFrom = currentRec.getValue("createdfrom");
+      if (tranType === "journalentry" && createdFrom) return;
       // const isVoid = currentRec.getValue("void");
       // if (isVoid) return;
 
