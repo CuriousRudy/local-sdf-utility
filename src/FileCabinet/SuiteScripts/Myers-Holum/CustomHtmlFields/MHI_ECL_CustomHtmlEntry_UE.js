@@ -23,6 +23,9 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
     const nexttab = RUNTIME.getCurrentScript().getParameter(
       "custscript_mhi_ecl_html_inputs_tabid",
     );
+    const tabname = RUNTIME.getCurrentScript().getParameter(
+      "custscript_mhi_ecl_html_cust_tabname",
+    );
 
     form.clientScriptModulePath = "./MHI_ECL_CustomHtmlEntry_CS.js";
 
@@ -46,18 +49,12 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
       // Add custom tab
       const customtab = form.addTab({
         id: tabId,
-        label: "KF Sell Sheet",
+        label: tabname || "KF - Sell Sheet",
       });
       form.insertTab({
         tab: customtab,
         nexttab,
       });
-
-      // Add HTML field to the custom field group
-      // form.addFieldGroup({
-      //   id: "custpage_mhi_ecl_html_group",
-      //   label: "Custom HTML Fields",
-      // });
 
       form.addField({
         id: "custpage_mhi_ecl_html_field",
@@ -290,43 +287,6 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
     });
     return { results, groupedRec };
   };
-
-  function getCustomRecordTypeValue2(name) {
-    //leverage NetSuite's URL generator to get the record type
-    return getURLParameterByName("rectype", nlapiResolveURL("RECORD", name));
-
-    //url parser helper function
-    function getURLParameterByName(name, url) {
-      log.audit("getURLParameterByName", { name, url });
-      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(url);
-      return results === null ? "" : results[1].replace(/\+/g, " ");
-    }
-  }
-
-  function getCustomRecordTypeValue(name) {
-    let url = require(["N/url"]);
-    url = require("N/url");
-    //leverage NetSuite's URL generator to get the record type
-    return getURLParameterByName(
-      "rectype",
-      url.resolveRecord({
-        isEditMode: false,
-        recordType: name,
-        // recordId: 1
-      }),
-    );
-
-    //url parser helper function
-    function getURLParameterByName(name, url) {
-      log.audit("getURLParameterByName", { name, url });
-      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(url);
-      return results === null ? "" : results[1].replace(/\+/g, " ");
-    }
-  }
 
   function generateCustomInput(
     contextType,

@@ -1,5 +1,6 @@
 <customrecordtype scriptid="customrecord_mhi_ecl_cust_html_config">
   <accesstype>CUSTRECORDENTRYPERM</accesstype>
+  <aidescription></aidescription>
   <allowattachments>T</allowattachments>
   <allowinlinedeleting>F</allowinlinedeleting>
   <allowinlinedetaching>T</allowinlinedetaching>
@@ -42,6 +43,7 @@
   <customrecordcustomfields>
     <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_type">
       <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
       <allowquickadd>F</allowquickadd>
       <applyformatting>F</applyformatting>
       <checkspelling>F</checkspelling>
@@ -82,6 +84,7 @@
     </customrecordcustomfield>
     <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_label">
       <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
       <allowquickadd>F</allowquickadd>
       <applyformatting>F</applyformatting>
       <checkspelling>F</checkspelling>
@@ -122,6 +125,7 @@
     </customrecordcustomfield>
     <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_target">
       <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
       <allowquickadd>F</allowquickadd>
       <applyformatting>F</applyformatting>
       <checkspelling>F</checkspelling>
@@ -162,13 +166,14 @@
     </customrecordcustomfield>
     <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_text">
       <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
       <allowquickadd>F</allowquickadd>
       <applyformatting>F</applyformatting>
       <checkspelling>F</checkspelling>
       <defaultchecked>F</defaultchecked>
       <defaultselection></defaultselection>
       <defaultvalue></defaultvalue>
-      <description>The id of the field used to store the text input for this field</description>
+      <description>This field stores the internal ID of the Custom Field designated to hold the primary input value. If the configuration specifies a Text field, the ID stored here corresponds to a Text Custom field.</description>
       <displayheight></displayheight>
       <displaytype>NORMAL</displaytype>
       <displaywidth></displaywidth>
@@ -177,11 +182,11 @@
       <encryptatrest>F</encryptatrest>
       <fieldtype>TEXT</fieldtype>
       <globalsearch>F</globalsearch>
-      <help>The id of the field used to store the text input for this field</help>
+      <help>This field stores the internal ID of the Custom Field designated to hold the primary input value. If the configuration specifies a Text field, the ID stored here corresponds to a Text Custom field.</help>
       <isformula>F</isformula>
       <ismandatory>F</ismandatory>
       <isparent>F</isparent>
-      <label>MHI | Cust HTML Text Input</label>
+      <label>MHI | Cust HTML Main Input</label>
       <linktext></linktext>
       <maxlength></maxlength>
       <maxvalue></maxvalue>
@@ -202,6 +207,7 @@
     </customrecordcustomfield>
     <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_radio">
       <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
       <allowquickadd>F</allowquickadd>
       <applyformatting>F</applyformatting>
       <checkspelling>F</checkspelling>
@@ -242,6 +248,7 @@
     </customrecordcustomfield>
     <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_group">
       <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
       <allowquickadd>F</allowquickadd>
       <applyformatting>F</applyformatting>
       <checkspelling>F</checkspelling>
@@ -273,6 +280,129 @@
       <searchdefault></searchdefault>
       <searchlevel>2</searchlevel>
       <selectrecordtype>[scriptid=customrecord_mhi_ecl_html_cust_group]</selectrecordtype>
+      <showinlist>T</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_seq">
+      <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>T</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description>The sequence in which this field should appear within the Fields subtab.</description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <enabletextenhance>F</enabletextenhance>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>INTEGER</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help>The sequence in which this field should appear within the Fields subtab.</help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>Display Sequence</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>T</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_field_type">
+      <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description>The type of field that should be rendered. If set to text, script will also check to see if radio is present.</description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <enabletextenhance>F</enabletextenhance>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>SELECT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help>The type of field that should be rendered. If set to text, script will also check to see if radio is present. </help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>Field Type</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete>NO_ACTION</onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype>[scriptid=customrecord_mhi_ecl_html_field_types]</selectrecordtype>
+      <showinlist>T</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_mhi_ecl_cust_html_field_src">
+      <accesslevel>2</accesslevel>
+      <aidescription></aidescription>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <enabletextenhance>F</enabletextenhance>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>List Souce</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
       <showinlist>T</showinlist>
       <sourcefilterby></sourcefilterby>
       <sourcefrom></sourcefrom>
