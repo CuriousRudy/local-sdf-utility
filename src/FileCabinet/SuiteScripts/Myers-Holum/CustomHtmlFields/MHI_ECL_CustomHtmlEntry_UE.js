@@ -122,13 +122,14 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
         htmlStr += `<div style="margin-bottom:4px;">`;
         if (groupData.title) {
           htmlStr += `<p style="font-weight:bold; font-size:16px;">${groupData.title}`;
-          if (groupData.url)
+          if (groupData.url) {
             htmlStr += `<a href="${groupData.url}" target="_blank" style="display:inline-flex;align-items:center;padding: 8px 4px 0px 4px;">`;
-          htmlStr += `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;">
+            htmlStr += `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;">
               <circle cx="10" cy="10" r="9" stroke="#0070d2" stroke-width="2" fill="#eaf6ff"/>
               <polygon points="8,6 14,10 8,14" fill="#0070d2"/>
               </svg>
             </a></p>`;
+          }
         } else {
           htmlStr += `<p style="font-weight:bold; font-size:16px; margin-bottom:4px;">Additional Information</p>`;
         }
@@ -346,15 +347,19 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
           </select>`;
     } else if (fieldType == 5) {
       // convert the date format from the record into yyyy-mm-dd for the date input value
-      const formattedDate = inputVal
-        ? `${inputVal.getFullYear()}-${inputVal.getMonth() + 1 < 10 ? "0" : ""}${inputVal.getMonth() + 1}-${inputVal.getDate() < 10 ? "0" : ""}${inputVal.getDate()}`
-        : "";
-
+      let formattedDate = false;
+      if (inputVal) {
+        const inputDate = new Date(inputVal);
+        formattedDate = inputDate
+          ? `${inputDate.getFullYear()}-${inputDate.getMonth() + 1 < 10 ? "0" : ""}${inputDate.getMonth() + 1}-${inputDate.getDate() < 10 ? "0" : ""}${inputDate.getDate()}`
+          : "";
+      }
       htmlStr += `<input ${
         contextType === "view" ? "disabled" : ""
       } type="date" id="custpage_${fixInputId}" 
-              value="${formattedDate}" style="width:30%; border-radius:6px; margin-right:10px; padding:8px 8px; border:1px solid #ccc;" 
-              onchange="(function(e) { debugger; console.log('changed the date input'); require(['N/currentRecord'], function(CR) { const curr = CR.get(); const setDate = document.querySelector('#custpage_${fixInputId}').value; const [yr, mo, day] = setDate.split('-'); debugger; curr.setValue('${inputId}', new Date(mo + '/' + day + '/' + yr)) }) })()"/>`;
+                value="${formattedDate || ""}" style="width:30%; border-radius:6px; margin-right:10px; padding:8px 8px; border:1px solid #ccc;" 
+                onchange="(function(e) { debugger; console.log('changed the date input'); require(['N/currentRecord'], function(CR) { const curr = CR.get(); const setDate = document.querySelector('#custpage_${fixInputId}').value; const [yr, mo, day] = setDate.split('-'); debugger; curr.setValue('${inputId}', new Date(mo + '/' + day + '/' + yr)) }) })()"/>`;
+      // }
     }
 
     const addRadio = [1, 2, 3, "1", "2", "3"];
