@@ -28,6 +28,7 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
     );
 
     form.clientScriptModulePath = "./MHI_ECL_CustomHtmlEntry_CS.js";
+    const customer = rec.getValue("entity");
 
     const { results, groupedRec } = getFieldConfigs(recType);
     log.audit("Running HTML Config Search", results);
@@ -67,11 +68,10 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
       htmlStr += `
         <style>
           .custom-radio-group {
-            display: flex;
             align-items: center;
           }
         ${indexes.map(
-          (res, ind) => `${res} { display: flex;
+          (res, ind) => `${res} {
             align-items: center;
             cursor: pointer;
             font-weight: 500;
@@ -87,7 +87,6 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
             width: 20px;
             height: 20px;
             margin-right: 6px;
-            display: inline-flex;
             align-items: center;
             justify-content: center;
           }
@@ -108,22 +107,23 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
           }
             ${indexes.map((res, ind) => `${res}:hover { background: #f0f4fa; }`)}
         </style>`;
-      htmlStr = "<div style='display:flex; width:100%;'>";
+      htmlStr = "<div style='width:100%;'>";
       const groups = Object.keys(groupedRec);
+      const sortedGroups = _.sortBy(groups, (g) => groupedRec[g].seq);
 
-      groups.forEach((group) => {
-        log.audit({
-          title: group,
-          details: { g: groupedRec[group] },
-        });
+      sortedGroups.forEach((group) => {
+        // log.audit({
+        //   title: group,
+        //   details: { g: groupedRec[group] },
+        // });
         const groupData = groupedRec[group];
-        htmlStr += `<div style="width:100%; flex:1; margin:10px; border:1px solid #eee; border-radius:8px; padding:16px; ">`;
+        htmlStr += `<div style="width:50%; justify-content: center; margin:10px; border:1px solid #eee; border-radius:8px; padding:16px; ">`;
 
         htmlStr += `<div style="margin-bottom:4px;">`;
         if (groupData.title) {
           htmlStr += `<p style="font-weight:bold; font-size:16px;">${groupData.title}`;
           if (groupData.url) {
-            htmlStr += `<a href="${groupData.url}" target="_blank" style="display:inline-flex;align-items:center;padding: 8px 4px 0px 4px;">`;
+            htmlStr += `<a href="${groupData.url}" target="_blank" style="align-items:center;padding: 8px 4px 0px 4px;">`;
             htmlStr += `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;">
               <circle cx="10" cy="10" r="9" stroke="#0070d2" stroke-width="2" fill="#eaf6ff"/>
               <polygon points="8,6 14,10 8,14" fill="#0070d2"/>
@@ -138,8 +138,9 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
         }
         htmlStr += `</div>`;
         log.audit("groupData.fields", groupData.fields);
+        const sortFields = _.sortBy(groupData.fields, (f) => f.seq);
 
-        groupData.fields.forEach((result, ind) => {
+        sortFields.forEach((result, ind) => {
           log.audit("Rendering Field", {
             data: result,
           });
@@ -149,27 +150,27 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
           const textVal = rec.getValue(mainInput); // get the values from the record itself
           const radioVal = rec.getValue(radio); // get the values from the record itself
 
-          const listOptions = [];
-          if (listSource) {
-            const listOpSearch = SEARCH.create({
-              type: listSource,
-              columns: ["name"],
-            });
-            listOpSearch.run().each((res) => {
-              listOptions.push({
-                value: res.id,
-                text: res.getValue("name"),
-              });
-              return true;
-            });
-          }
+          const listOptions = listSource
+            ? searchListOptions(listSource, customer)
+            : [];
+          // if (listSource) {
+          //   const listOpSearch = SEARCH.create({
+          //     type: listSource,
+          //     columns: ["name"],
+          //   });
+          //   listOpSearch.run().each((res) => {
+          //     listOptions.push({
+          //       value: res.id,
+          //       text: res.getValue("name"),
+          //     });
+          //     return true;
+          //   });
+          // }
 
           log.audit("Field Values", {
             mainInput,
             textVal,
-            radio,
-            radioVal,
-            fieldtype,
+            url,
           });
 
           const inputStr = generateCustomInput(
@@ -277,9 +278,10 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
           mainInput: result.getValue("custrecord_mhi_ecl_cust_html_text"),
           radio: result.getValue("custrecord_mhi_ecl_cust_html_radio"),
           label: result.getValue("custrecord_mhi_ecl_cust_html_label"),
-          url: result.getValue("custrecord_mhi_ecl_cust_html_url"),
+          url: result.getValue("custrecord_mhi_ecl_cust_html_target"),
           fieldtype: result.getValue("custrecord_mhi_ecl_cust_html_field_type"),
           listSource: result.getValue("custrecord_mhi_ecl_cust_html_field_src"),
+          seq: result.getValue("custrecord_mhi_ecl_cust_html_seq"),
         });
         results.push(result);
       }
@@ -301,11 +303,15 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
     index,
     listOptions = false,
   ) {
+    // log.audit("generateCustomInput", {
+    //   label,
+    //   url,
+    // });
     let htmlStr = "";
 
-    htmlStr += `<label style="font-size:14px; align-items:center;gap:4px;" for="custhtml_text">${label}</label>`;
+    htmlStr += `<label style="font-size:14px; align-items:center; gap:4px;" for="custhtml_text">${label}</label>`;
     if (url) {
-      htmlStr += `<a href="${url}" target="_blank" style="display:inline-flex;align-items:center;padding: 8px 4px 0px 4px;">
+      htmlStr += `<a href="${url}" target="_blank" style="display:inline-flex; align-items:center;padding: 8px 4px 0px 4px;">
               <svg width="16" height="16" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;">
               <circle cx="10" cy="10" r="9" stroke="#0070d2" stroke-width="2" fill="#eaf6ff"/>
               <polygon points="8,6 14,10 8,14" fill="#0070d2"/>
@@ -319,19 +325,9 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
       htmlStr += `<input ${
         contextType === "view" ? "disabled" : ""
       } value="${inputVal}" type="text" id="custpage_${fixInputId}" 
-              style="width:30%; border-radius:6px; margin-right:10px; padding:8px 8px; border:1px solid #ccc;" 
+              style="width:50%; border-radius:6px; margin-right:10px; padding:8px 8px; border:1px solid #ccc;" 
               onchange="(function(e) { debugger; console.log('changed the text input'); require(['N/currentRecord'], function(CR) { const curr = CR.get(); curr.setValue('${inputId}',document.querySelector('#custpage_${fixInputId}').value) }); })()"/>`;
     } else if (fieldType == 4) {
-      log.audit("generateCustomInput", {
-        contextType,
-        fieldType,
-        inputId,
-        inputVal,
-        radioId,
-        radioVal,
-        index,
-        listOptions,
-      });
       const selectOptions =
         listOptions.length &&
         listOptions
@@ -394,6 +390,47 @@ define(["N/search", "N/ui/serverWidget", "N/runtime", "../MHI_Lodash_Lib.js"], (
 
     return htmlStr;
   }
+
+  const searchListOptions = (listSource, customer = false) => {
+    const lowerCase = listSource.toLowerCase();
+    const listOptions = [];
+    if (lowerCase === "contacts" || lowerCase === "contact") {
+      if (customer) {
+        const contactSearch = SEARCH.create({
+          type: "contact",
+          filters: [
+            ["type", "anyof", "CustJob"],
+            "AND",
+            ["company", "anyof", customer],
+            "AND",
+            ["isinactive", "is", "F"],
+          ],
+          columns: [SEARCH.createColumn({ name: "entityid", label: "Name" })],
+        });
+        contactSearch.run().each((res) => {
+          listOptions.push({
+            value: res.id,
+            text: res.getValue("entityid"),
+          });
+          return true;
+        });
+      }
+    } else if (lowerCase === "employees" || lowerCase === "employee") {
+    } else {
+      const listOpSearch = SEARCH.create({
+        type: listSource,
+        columns: ["name"],
+      });
+      listOpSearch.run().each((res) => {
+        listOptions.push({
+          value: res.id,
+          text: res.getValue("name"),
+        });
+        return true;
+      });
+    }
+    return listOptions;
+  };
 
   return {
     beforeLoad,
