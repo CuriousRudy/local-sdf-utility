@@ -42,7 +42,7 @@ define(["N/search", "N/ui/message"], (SEARCH, MESSAGE) => {
         type: MESSAGE.Type.ERROR,
       }).show();
       return false;
-    }
+    } else return true;
   }
 
   return {
