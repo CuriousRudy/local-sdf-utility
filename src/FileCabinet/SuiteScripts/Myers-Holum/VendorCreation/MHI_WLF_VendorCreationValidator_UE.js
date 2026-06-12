@@ -7,8 +7,11 @@ define(["N/search", "N/error"], (search, error) => {
     if (context.type !== context.UserEventType.CREATE) return;
 
     const rec = context.newRecord;
-    const taxId = rec.getValue({ fieldId: "taxidnum" });
+    const taxId = (rec.getValue({ fieldId: "taxidnum" }) || "").trim();
     if (!taxId) return;
+
+    // Persist the trimmed value so the saved record matches what we validate against.
+    rec.setValue({ fieldId: "taxidnum", value: taxId });
 
     const results = search
       .create({

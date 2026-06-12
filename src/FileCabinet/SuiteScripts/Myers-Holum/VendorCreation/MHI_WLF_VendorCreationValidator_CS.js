@@ -2,7 +2,7 @@
  * @NApiVersion 2.1
  * @NScriptType ClientScript
  */
-define(["N/search", "N/ui/message"], (SEARCH, MESSAGE) => {
+define(["N/search", "N/ui/message", "N/url"], (SEARCH, MESSAGE, URL) => {
   /**
    * Triggered when the page is initialized.
    * @param {Object} context
@@ -19,9 +19,11 @@ define(["N/search", "N/ui/message"], (SEARCH, MESSAGE) => {
    */
   function saveRecord(context) {
     const currRec = context.currentRecord;
-    if (currRec.id) return true;
 
-    const taxIdNum = currRec.getValue({ fieldId: "taxidnum" });
+    const resolveVendorUrl = (vendorId) =>
+      URL.resolveRecord({ recordType: "vendor", recordId: vendorId });
+    if (currRec.id) return true;
+    const taxIdNum = (currRec.getValue({ fieldId: "taxidnum" }) || "").trim();
     if (!taxIdNum) return true;
 
     const results = SEARCH.create({
@@ -36,9 +38,11 @@ define(["N/search", "N/ui/message"], (SEARCH, MESSAGE) => {
       const vendorName = results[0].getValue
         ? results[0].getValue({ name: "entityid" })
         : null;
+      const vendorId = results[0].getValue({ name: "internalid" });
+      const vendorUrl = resolveVendorUrl(vendorId);
       MESSAGE.create({
         title: "Duplicate Tax ID",
-        message: `Tax ID: ${taxIdNum} is already used${vendorName ? ` by ${vendorName}` : ""}. Please update the Tax Id and try again.`,
+        message: `Tax ID: ${taxIdNum} is already used${vendorName ? ` by <a href="${vendorUrl}" target="_blank">${vendorName}</a>` : ""}. Please update the Tax Id and try again.`,
         type: MESSAGE.Type.ERROR,
       }).show();
       return false;
