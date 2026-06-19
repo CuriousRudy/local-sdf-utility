@@ -3,10 +3,12 @@
         <path>~/AccountConfiguration/*</path>
     </configuration>
     <files>
-        <path>~/FileCabinet/*</path>
+        <!-- <path>~/FileCabinet/*</path> -->
+        <path>~/FileCabinet/SuiteScripts/Myers-Holum/VendorCreation/*</path>
     </files>
     <objects>
-        <path>~/Objects/*</path>
+        <!-- <path>~/Objects/*</path> -->
+        <path>~/Objects/VendorTaxIdValidate/*</path>
     </objects>
     <translationimports>
         <path>~/Translations/*</path>
