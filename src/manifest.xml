@@ -1,4 +1,19 @@
 <manifest projecttype="ACCOUNTCUSTOMIZATION">
   <projectname>MHI SuiteScript Starter</projectname>
   <frameworkversion>1.0</frameworkversion>
+  <dependencies>
+    <features>
+      <feature required="true">SERVERSIDESCRIPTING</feature>
+    </features>
+    <objects>
+      <object>cseg_pncl_industry</object>
+      <object>custentity_pncl_gl_code_paycom</object>
+      <object>custentity_pncl_nonlabor_other</object>
+      <object>customlist_pncl_gl_code_paycom</object>
+      <object>custentity_pncl_labor_subcontract</object>
+      <object>customrecord_cseg_pncl_industry</object>
+      <object>custentity_pncl_nonlabor_material</object>
+      <object>custentity_pncl_dl_labor_budget</object>
+    </objects>
+  </dependencies>
 </manifest>

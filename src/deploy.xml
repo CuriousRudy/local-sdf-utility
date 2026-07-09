@@ -3,10 +3,14 @@
         <path>~/AccountConfiguration/*</path>
     </configuration>
     <files>
-        <path>~/FileCabinet/*</path>
+        <!-- <path>~/FileCabinet/*</path> -->
+        <!-- <path>~/FileCabinet/Paycom/*</path> -->
+        <path>~/FileCabinet/SuiteScripts/Myers-Holum/MHI_PPC_PaycomDatasetExport_SS.js</path>
     </files>
     <objects>
-        <path>~/Objects/*</path>
+        <!-- <path>~/Objects/*</path> -->
+        <path>~/Objects/customscript_mhi_ppc_paycom_proj_exp_ss.xml</path>
+        <path>~/Objects/customsearch_pncl_paycom_export.xml</path>
     </objects>
     <translationimports>
         <path>~/Translations/*</path>
