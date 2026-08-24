@@ -70,10 +70,14 @@
     <#assign ccdEbanksStr = "">
 	<#assign ccdEbankAccNumsStr = "">
     <#assign ccdEntitiesStr = "">
+	<#assign ccdTrandatesStr = "">
+	<#assign ccdMemosStr = "">
     <#assign ppdPaymentsStr = "">
     <#assign ppdEbanksStr = "">
-    <#assign ppdEntitiesStr = "">    
+    <#assign ppdEntitiesStr = "">
 	<#assign ppdEbankAccNumsStr = "">
+	<#assign ppdTrandatesStr = "">
+	<#assign ppdMemosStr = "">
     <#-- avoid sequence concatenation, use sequence strings instead -->
     <#list payments as payment>
         <#assign ebank = ebanks[payment_index]>    
@@ -84,23 +88,31 @@
             <#assign ccdEbanksStr = ccdEbanksStr + "ebanks[" + payment_index?c?string + "],">
             <#assign ccdEntitiesStr = ccdEntitiesStr + "entities[" + payment_index?c?string + "],">
 			<#assign ccdEbankAccNumsStr = ccdEbankAccNumsStr + "ebank_accountnums.list[" + payment_index?c?string + "],">
+			<#assign ccdTrandatesStr = ccdTrandatesStr + "payments[" + payment_index?c?string + "].trandate,">
+			<#assign ccdMemosStr = ccdMemosStr + "(payments[" + payment_index?c?string + "].memo)!\"\",">
         </#if>
         <#if ebank.custrecord_2663_parent_employee == payment.entity>
             <#assign ppdPaymentsStr = ppdPaymentsStr + "payments[" + payment_index?c?string + "],">
             <#assign ppdEbanksStr = ppdEbanksStr + "ebanks[" + payment_index?c?string + "],">
             <#assign ppdEntitiesStr = ppdEntitiesStr + "entities[" + payment_index?c?string + "],">
 			<#assign ppdEbankAccNumsStr = ppdEbankAccNumsStr + "ebank_accountnums.list[" + payment_index?c?string + "],">
-        </#if>    
+			<#assign ppdTrandatesStr = ppdTrandatesStr + "payments[" + payment_index?c?string + "].trandate,">
+			<#assign ppdMemosStr = ppdMemosStr + "(payments[" + payment_index?c?string + "].memo)!\"\",">
+        </#if>
     </#list>
     <#-- convert from strings to sequences -->
     <#assign ccdPayments = ("[" + removeEnding(ccdPaymentsStr, ",") + "]")?eval>
     <#assign ccdEbanks = ("[" + removeEnding(ccdEbanksStr, ",") + "]")?eval>
     <#assign ccdEntities = ("[" + removeEnding(ccdEntitiesStr, ",") + "]")?eval>
 	<#assign ccdEbankAccNums = ("[" + removeEnding(ccdEbankAccNumsStr, ",") + "]")?eval>
+	<#assign ccdTrandates = ("[" + removeEnding(ccdTrandatesStr, ",") + "]")?eval>
+	<#assign ccdMemos = ("[" + removeEnding(ccdMemosStr, ",") + "]")?eval>
     <#assign ppdPayments = ("[" + removeEnding(ppdPaymentsStr, ",") + "]")?eval>
     <#assign ppdEbanks = ("[" + removeEnding(ppdEbanksStr, ",") + "]")?eval>
     <#assign ppdEntities = ("[" + removeEnding(ppdEntitiesStr, ",") + "]")?eval>
 	<#assign ppdEbankAccNums = ("[" + removeEnding(ppdEbankAccNumsStr, ",") + "]")?eval>
+	<#assign ppdTrandates = ("[" + removeEnding(ppdTrandatesStr, ",") + "]")?eval>
+	<#assign ppdMemos = ("[" + removeEnding(ppdMemosStr, ",") + "]")?eval>
 
     <#function computeSequenceId>
         <#assign lastSeqId = getSequenceId(true)>
@@ -153,13 +165,15 @@
 <#assign ppdBankNumberHash = 0>
 <#assign totalBankNumberHash = 0>
 
+<#-- OLD: 101 ${setLength(cbank.custpage_eft_custrecord_2663_bank_num, 9)}${setLength(cbank.custpage_eft_custrecord_2663_bank_comp_id, 10)}${setLength(pfa.custrecord_2663_file_creation_timestamp?date?string("yyMMdd"),6)}${setLength(pfa.custrecord_2663_file_creation_timestamp?time?string("HHmm"),4)}${setLength(computeSequenceId(),1)}094101${setLength(cbank.custpage_eft_custrecord_2663_bank_name, 23)}${setLength(cbank.custrecord_2663_legal_name, 23)}        -->
 <#-- UPDATE: 101${immediatedestination,10}${immediateorigin, 10}${creationdate(YYMMDD,6)}${creationtime(HHMM),4}${sequence,1}094101${destination(DAL|RIC),23}${${legalname,23}${blanks,8}}-->
-101 ${setLength(cbank.custpage_eft_custrecord_2663_bank_num, 9)}${setLength(cbank.custpage_eft_custrecord_2663_bank_comp_id, 10)}${setLength(pfa.custrecord_2663_file_creation_timestamp?date?string("yyMMdd"),6)}${setLength(pfa.custrecord_2663_file_creation_timestamp?time?string("HHmm"),4)}${setLength(computeSequenceId(),1)}094101${setLength(cbank.custpage_eft_custrecord_2663_bank_name, 23)}${setLength(cbank.custrecord_2663_legal_name, 23)}        
+101${setLength(cbank.custpage_eft_custrecord_2663_bank_num, 9)}${setLength(cbank.custpage_eft_custrecord_2663_bank_comp_id, 10)}${setLength(pfa.custrecord_2663_file_creation_timestamp?date?string("yyMMdd"),6)}${setLength(pfa.custrecord_2663_file_creation_timestamp?time?string("HHmm"),4)}${setLength(computeSequenceId(),1)}094101${setLength("Bank of America DAL",23)}${setLength(cbank.custrecord_2663_legal_name,23)}${setLength("",8)}
 <#assign recordCount = recordCount + 1>
 <#if (ccdPayments?size > 0) >
     <#assign batchCount = batchCount + 1>    
-<#--UPDATE: 5${classcode,3}${companyname,16}${memo,20}${companyid,10}CCD${setLength("Payment",10)}${transactiondate,6}${postingdateYYMMDD,6}${blanks,3}1${routingnumber,8}${batchnumber,7} -->    
-5${getBankServiceClassCode()}${setLength(cbank.custrecord_2663_legal_name,16)}                    ${setLength(cbank.custpage_eft_custrecord_2663_issuer_num,10)}CCDPayment   ${pfa.custrecord_2663_process_date?string("yyMMdd")}${pfa.custrecord_2663_process_date?string("yyMMdd")}   1${setLength(cbank.custpage_eft_custrecord_2663_processor_code,4)}${setLength(cbank.custpage_eft_custrecord_2663_bank_code,4)}${setPadding(batchCount,"left","0",7)}
+<#-- OLD: 5${getBankServiceClassCode()}${setLength(cbank.custrecord_2663_legal_name,16)}                    ${setLength(cbank.custpage_eft_custrecord_2663_issuer_num,10)}CCDPayment   ${pfa.custrecord_2663_process_date?string("yyMMdd")}${pfa.custrecord_2663_process_date?string("yyMMdd")}   1${setLength(cbank.custpage_eft_custrecord_2663_processor_code,4)}${setLength(cbank.custpage_eft_custrecord_2663_bank_code,4)}${setPadding(batchCount,"left","0",7)} -->
+<#--UPDATE: 5${classcode,3}${companyname,16}${memo,20}${companyid,10}CCD${setLength("Payment",10)}${transactiondate,6}${postingdateYYMMDD,6}${blanks,3}1${routingnumber,8}${batchnumber,7} -->
+5${getBankServiceClassCode()}${setLength(cbank.custrecord_2663_legal_name,16)}${setLength(ccdMemos[0],20)}${setLength(cbank.custpage_eft_custrecord_2663_issuer_num,10)}CCD${setLength("Payment",10)}${setLength(ccdTrandates[0]?string("yyMMdd"),6)}${setLength(pfa.custrecord_2663_process_date?string("yyMMdd"),6)}${setLength("",3)}1${setLength(cbank.custpage_eft_custrecord_2663_processor_code,8)}${setPadding(batchCount,"left","0",7)}
     <#assign recordCount = recordCount + 1>
     <#list ccdPayments as payment>
         <#assign batchLineNum = batchLineNum + 1>
@@ -167,8 +181,9 @@
 		<#assign ebankAccNum = ccdEbankAccNums[payment_index]>
         <#assign entity = ccdEntities[payment_index]> 
         <#assign ccdBankNumberHash = ccdBankNumberHash + ebank.custrecord_2663_entity_bank_no?substring(0,8)?number>   
+<#-- OLD: 6${getEntityBankAccountType(ebank.custrecord_2663_entity_bank_acct_type)}${setLength(ebank.custrecord_2663_entity_bank_no,8)}${setLength(ebank.custrecord_2663_entity_country_check,1)}${setLength(ebankAccNum.custrecord_2663_entity_acct_no,17)}${setPadding(formatAmount(getAmount(payment)),"left","0",10)}${setLength(ebank.custrecord_2663_parent_vendor.internalId,15)}${setLength(buildEntityName(entity),22)}  0${setLength(cbank.custpage_eft_custrecord_2663_processor_code,4)}${setLength(cbank.custpage_eft_custrecord_2663_bank_code,4)}${setPadding(batchLineNum,"left","0",7)} -->
 <#-- UPDATE: 6${transactioncode,2}${routingnumber,9}${ebank.accountnumber,17}${customernumber,15}${customername,22}${blanks,2}${addenda,1}${batchlinenumber,15} -->
-6${getEntityBankAccountType(ebank.custrecord_2663_entity_bank_acct_type)}${setLength(ebank.custrecord_2663_entity_bank_no,8)}${setLength(ebank.custrecord_2663_entity_country_check,1)}${setLength(ebankAccNum.custrecord_2663_entity_acct_no,17)}${setPadding(formatAmount(getAmount(payment)),"left","0",10)}${setLength(ebank.custrecord_2663_parent_vendor.internalId,15)}${setLength(buildEntityName(entity),22)}  0${setLength(cbank.custpage_eft_custrecord_2663_processor_code,4)}${setLength(cbank.custpage_eft_custrecord_2663_bank_code,4)}${setPadding(batchLineNum,"left","0",7)}
+6${getEntityBankAccountType(ebank.custrecord_2663_entity_bank_acct_type)}${setLength(ebank.custrecord_2663_entity_bank_no,8)}${setLength(ebank.custrecord_2663_entity_country_check,1)}${setLength(ebankAccNum.custrecord_2663_entity_acct_no,17)}${setPadding(formatAmount(getAmount(payment)),"left","0",10)}${setLength(ebank.custrecord_2663_parent_vendor.internalId,15)}${setLength(buildEntityName(entity),22)}${setLength("",2)}0${setPadding(batchLineNum,"left","0",15)}
         <#assign recordCount = recordCount + 1>
     </#list>
     <#if isBalanceLine()>
@@ -179,9 +194,9 @@
     </#if>
     <#assign lineCount = lineCount + batchLineNum>
     <#assign totalBankNumberHash = totalBankNumberHash + ccdBankNumberHash>
-    <#-- UPDATE: 8${classcode,3}${batchRecCount(only records count: 6, 7),6}${batchhash,10}${totaldebitamount,12}${totalcreditamount,12}${company id,10}${blanks,19}${blanks,6}${routing (DAL, RIC),8}${batchnumber,7} -->
-
-8${getBankServiceClassCode()}${setPadding(batchLineNum,"left","0",6)}${setPadding(ccdBankNumberHash,"left","0",10)}${setPadding(formatAmount(computeTotalDebitAmt(ccdPayments)),"left","0",12)}${setPadding(formatAmount(computeTotalAmount(ccdPayments)),"left","0",12)}${setLength(cbank.custpage_eft_custrecord_2663_issuer_num,10)}                         ${setLength(cbank.custpage_eft_custrecord_2663_bank_num, 8)}${setPadding(batchCount,"left","0",7)}
+<#-- OLD: 8${getBankServiceClassCode()}${setPadding(batchLineNum,"left","0",6)}${setPadding(ccdBankNumberHash,"left","0",10)}${setPadding(formatAmount(computeTotalDebitAmt(ccdPayments)),"left","0",12)}${setPadding(formatAmount(computeTotalAmount(ccdPayments)),"left","0",12)}${setLength(cbank.custpage_eft_custrecord_2663_issuer_num,10)}                         ${setLength(cbank.custpage_eft_custrecord_2663_bank_num, 8)}${setPadding(batchCount,"left","0",7)} -->
+<#-- UPDATE: 8${classcode,3}${batchRecCount(only records count: 6, 7),6}${batchhash,10}${totaldebitamount,12}${totalcreditamount,12}${company id,10}${blanks,19}${blanks,6}${routing (DAL, RIC),8}${batchnumber,7} -->
+8${getBankServiceClassCode()}${setPadding(batchLineNum,"left","0",6)}${setPadding(ccdBankNumberHash,"left","0",10)}${setPadding(formatAmount(computeTotalDebitAmt(ccdPayments)),"left","0",12)}${setPadding(formatAmount(computeTotalAmount(ccdPayments)),"left","0",12)}${setLength(cbank.custpage_eft_custrecord_2663_issuer_num,10)}${setLength("",19)}${setLength(cbank.custpage_eft_custrecord_2663_processor_code,4)}${setLength(cbank.custpage_eft_custrecord_2663_bank_code,4)}${setPadding(batchCount,"left","0",7)}
 <#assign recordCount = recordCount + 1>
 </#if>
 <#assign batchLineNum = 0>
@@ -219,9 +234,10 @@
         <#assign padBlocksString = padBlocksString + padding + "\n">
     </#list>
 </#if>
+<#-- OLD: 9${setPadding(batchCount,"left","0",6)}${setPadding(computeTotalRecords(recordCount),"left","0",6)}${setPadding(lineCount,"left","0",8)}${setPadding(totalBankNumberHash,"left","0",10)}${setPadding(formatAmount(computeTotalDebitAmt(payments)),"left","0",12)}${setPadding(formatAmount(totalAmount),"left","0",12)}                                       ${padBlocksString}<#rt> -->
 <#-- UPDATE: 9${batchCount,6}${blockCount, 6}${batchRecCount(records 6 and 7),8}${entryhash, 10}${totaldebitamt,12}${totalcreditamt, 12}${blanks,39}-->
-9${setPadding(batchCount,"left","0",6)}${setPadding(computeTotalRecords(recordCount),"left","0",6)}${setPadding(lineCount,"left","0",8)}${setPadding(totalBankNumberHash,"left","0",10)}${setPadding(formatAmount(computeTotalDebitAmt(payments)),"left","0",12)}${setPadding(formatAmount(totalAmount),"left","0",12)}                                       ${padBlocksString}<#rt>
+9${setPadding(batchCount,"left","0",6)}${setPadding(computeTotalRecords(recordCount),"left","0",6)}${setPadding(lineCount,"left","0",8)}${setPadding(totalBankNumberHash,"left","0",10)}${setPadding(formatAmount(computeTotalDebitAmt(payments)),"left","0",12)}${setPadding(formatAmount(totalAmount),"left","0",12)}${setLengnth("",39)}<#rt>
 #OUTPUT END#
-#RETURN START#
+#RETURN START#`
 sequenceId:${newSeqId}
 #RETURN END#
